@@ -11,7 +11,7 @@ const knowledgeBaseInputSchema = z.object({
     .min(1, "Query is required.")
     .max(300, "Query is too long.")
     .describe(
-      "A natural language question about aviation terminology, aircraft, airport codes, or route information.",
+      "A natural language question about aviation terminology, aircraft, airport codes, route information, or aviation math reference facts.",
     ),
 });
 
@@ -65,7 +65,7 @@ export const knowledgeBaseTool = tool(
   {
     name: "knowledge_base",
     description:
-      "Use this for aviation facts and reference knowledge that should come from the local docs, such as aircraft types, squawk codes, airport codes, terminology, and common routes.",
+      "Use this for aviation facts and reference knowledge that should come from the local docs, such as aircraft types, squawk codes, airport codes, terminology, common routes, and aviation math or unit conversion reference facts.",
     schema: knowledgeBaseInputSchema,
   },
 );

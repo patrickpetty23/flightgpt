@@ -1,4 +1,5 @@
-import { readFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
 import { logger } from "../logger";
@@ -6,21 +7,19 @@ import {
   embedTexts,
   getVectorStoreCount,
   overwriteVectorStore,
+  readVectorStoreMetadata,
   type VectorStoreRecord,
+  writeVectorStoreMetadata,
 } from "./vectorStore";
-
-const DOC_FILENAMES = [
-  "aircraft-types.md",
-  "aviation-terminology.md",
-  "airports-reference.md",
-  "opensky-api-reference.md",
-  "common-routes.md",
-];
 
 const CHUNK_SIZE = 900;
 const CHUNK_OVERLAP = 150;
 
 type ChunkSeed = Omit<VectorStoreRecord, "embedding">;
+type SourceDocument = {
+  filename: string;
+  content: string;
+};
 
 function getDocsDirectory(): string {
   return path.resolve(process.cwd(), "docs");
@@ -68,9 +67,8 @@ function splitIntoChunks(text: string): string[] {
 async function loadChunkSeeds(): Promise<ChunkSeed[]> {
   const seeds: ChunkSeed[] = [];
 
-  for (const filename of DOC_FILENAMES) {
-    const fullPath = path.join(getDocsDirectory(), filename);
-    const content = await readFile(fullPath, "utf8");
+  for (const document of await loadSourceDocuments()) {
+    const { filename, content } = document;
     const chunks = splitIntoChunks(content);
 
     chunks.forEach((chunk, chunkIndex) => {
@@ -86,13 +84,51 @@ async function loadChunkSeeds(): Promise<ChunkSeed[]> {
   return seeds;
 }
 
-export async function ensureDocsEmbedded(): Promise<void> {
-  const currentCount = await getVectorStoreCount();
+async function loadSourceDocuments(): Promise<SourceDocument[]> {
+  const entries = await readdir(getDocsDirectory(), { withFileTypes: true });
+  const filenames = entries
+    .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
+    .map((entry) => entry.name)
+    .sort((left, right) => left.localeCompare(right));
 
-  if (currentCount > 0) {
+  const documents = await Promise.all(
+    filenames.map(async (filename) => ({
+      filename,
+      content: await readFile(path.join(getDocsDirectory(), filename), "utf8"),
+    })),
+  );
+
+  if (documents.length === 0) {
+    throw new Error("No markdown documents found in docs/.");
+  }
+
+  return documents;
+}
+
+function buildDocSignature(documents: SourceDocument[]): string {
+  const hash = createHash("sha256");
+
+  for (const document of documents) {
+    hash.update(document.filename);
+    hash.update("\n");
+    hash.update(document.content.replace(/\r\n/g, "\n"));
+    hash.update("\n---\n");
+  }
+
+  return hash.digest("hex");
+}
+
+export async function ensureDocsEmbedded(): Promise<void> {
+  const documents = await loadSourceDocuments();
+  const docSignature = buildDocSignature(documents);
+  const currentCount = await getVectorStoreCount();
+  const currentMetadata = await readVectorStoreMetadata();
+
+  if (currentCount > 0 && currentMetadata?.docSignature === docSignature) {
     logger.info({
       event: "vector_store_reused",
       recordCount: currentCount,
+      docSignature,
     });
     return;
   }
@@ -105,10 +141,17 @@ export async function ensureDocsEmbedded(): Promise<void> {
   }));
 
   await overwriteVectorStore(records);
+  await writeVectorStoreMetadata({
+    docSignature,
+    sourceFiles: documents.map((document) => document.filename),
+    recordCount: records.length,
+    updatedAt: new Date().toISOString(),
+  });
 
   logger.info({
     event: "docs_embedded",
-    documentCount: DOC_FILENAMES.length,
+    documentCount: documents.length,
     chunkCount: records.length,
+    docSignature,
   });
 }

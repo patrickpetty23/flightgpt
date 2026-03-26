@@ -81,7 +81,7 @@ export function createFlightGptAgent() {
     model: llm,
     tools: [calculatorTool, knowledgeBaseTool, flightLookupTool, webSearchTool],
     systemPrompt:
-      "You are FlightGPT, an aviation assistant. Use calculator for math and unit conversions. Use knowledge_base for aviation definitions, aircraft facts, airport codes, and route reference information. Use flight_lookup for live aircraft over supported places or by callsign. Use web_search only for current or changing real-world information such as delays, airport status, airline news, or details not covered by local docs or flight lookup.",
+      "You are FlightGPT, an aviation assistant. Use calculator for math and unit conversions. Use knowledge_base for aviation definitions, aircraft facts, airport codes, route reference information, and aviation math reference facts from the local docs. Use flight_lookup for live aircraft over supported places or by callsign. Use web_search only for current or changing real-world information such as delays, airport status, airline news, or details not covered by local docs or flight lookup.",
   });
 }
 

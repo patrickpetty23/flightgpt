@@ -1,59 +1,127 @@
 # Aircraft Types Reference
 
-## Boeing 737 Family
+## Narrow-Body Aircraft (Single-Aisle)
 
-The Boeing 737 family is one of the most common narrow-body airliner families in the world. Variants include the 737-700, 737-800, 737-900ER, and the newer 737 MAX models. Airlines often use these aircraft for short-haul and medium-haul domestic routes.
+### Boeing 737-800
+The 737-800 is the most common variant of the 737 family and one of the most widely flown commercial aircraft in the world.
+- Seating: 162–189 passengers (typical 2-3-2 config)
+- Range: up to 3,115 nautical miles
+- Cruise speed: ~485 mph (Mach 0.79)
+- Engines: 2x CFM56-7B
+- Common operators: Southwest (entire fleet), American, United, Delta, Ryanair
+- Use case: Domestic routes, short to medium haul
 
-- Typical seating: 126 to 215 passengers depending on configuration
-- Typical cruise speed: about 450 to 530 mph
-- Common use: domestic routes, regional trunk routes, and medium-haul service
+### Boeing 737 MAX 8
+The modern replacement for the 737-800 with improved fuel efficiency.
+- Seating: 162–178 passengers
+- Range: up to 3,550 nautical miles
+- Cruise speed: ~521 mph (Mach 0.79)
+- Engines: 2x CFM LEAP-1B
+- Common operators: Southwest, Alaska, American, United
+- Note: Grounded 2019–2020 following two fatal crashes; returned to service with software updates
 
-The 737-800 is especially common in US airline fleets and is frequently used by Southwest, American, United, and other major carriers.
+### Boeing 737-900ER
+The longest variant of the classic 737 family.
+- Seating: up to 220 passengers
+- Range: up to 3,200 nautical miles
+- Common operators: Alaska Airlines (primary fleet type), United
 
-## Airbus A320 Family
+### Airbus A320
+The most common Airbus narrow-body, competing directly with the 737-800.
+- Seating: 150–180 passengers
+- Range: up to 3,300 nautical miles
+- Cruise speed: ~511 mph (Mach 0.78)
+- Engines: CFM56 or IAE V2500
+- Common operators: Delta, United, American, JetBlue, Spirit
 
-The Airbus A320 family includes the A318, A319, A320, and A321, plus the newer A320neo-family variants. These are narrow-body jets designed for efficiency and flexibility on short and medium routes.
+### Airbus A321
+Stretched version of the A320, offering higher capacity on busier routes.
+- Seating: 180–220 passengers
+- Range: up to 3,200 nautical miles
+- Common operators: American (largest A321 fleet in the world), Delta, United, JetBlue
+- The A321XLR variant extends range to ~5,400 nautical miles, enabling transatlantic service
 
-- Typical seating: 100 to 240 passengers depending on model
-- Typical cruise speed: about 470 to 530 mph
-- Common use: domestic and transcontinental routes
+### Airbus A319
+Shorter version of the A320, used on thinner routes.
+- Seating: 120–150 passengers
+- Common operators: United, American, Frontier
 
-The A321 is longer than the A320 and can carry more passengers. Airlines often use the A321 on busier routes where a 737 or A320 would be too small.
+### Embraer E175
+A regional jet used by regional subsidiaries of major airlines.
+- Seating: 76 passengers
+- Range: up to 2,200 nautical miles
+- Common operators: SkyWest (for United, Delta, Alaska), Envoy (for American)
+- Often seen on routes from smaller cities to major hubs
 
-## Boeing 777
+### Bombardier CRJ-900
+Another common regional jet on short-haul feeder routes.
+- Seating: 76–90 passengers
+- Common operators: SkyWest, Endeavor Air (Delta Connection)
 
-The Boeing 777 is a wide-body twin-engine aircraft used for long-haul international flying. It is much larger than the 737 and A320 families and is known for high passenger capacity and long range.
+---
 
-- Typical seating: 300 to 396 passengers
-- Common use: long-haul international service
-- Examples: 777-200ER, 777-300ER, 777F
+## Wide-Body Aircraft (Twin-Aisle)
 
-The 777 is often one of the largest aircraft a traveler will see on scheduled passenger routes outside of the 747 and A380.
+### Boeing 777-200ER
+A long-range wide-body twin used heavily on international routes.
+- Seating: 300–400 passengers
+- Range: up to 7,700 nautical miles
+- Engines: 2x GE90 (largest turbofan engines ever built)
+- Common operators: Delta, United, American
 
-## Boeing 787 Dreamliner
+### Boeing 777-300ER
+The stretched, higher-capacity version of the 777.
+- Seating: 350–400 passengers
+- Range: up to 7,370 nautical miles
+- Common operators: Delta, Korean Air, Emirates (world's largest 777 fleet)
 
-The Boeing 787 is a modern wide-body twin-engine aircraft designed for fuel efficiency and long-range flights. Airlines use it on long international routes and thinner long-haul routes that do not need the size of a 777.
+### Boeing 787-8 Dreamliner
+A modern, fuel-efficient long-range aircraft. Notable for its composite airframe.
+- Seating: 242–259 passengers
+- Range: up to 7,305 nautical miles
+- Engines: 2x GEnx or Rolls-Royce Trent 1000
+- Common operators: United, American, Delta, Ana, Japan Airlines
 
-- Typical seating: 242 to 335 passengers
-- Common use: long-haul international flights
-- Notable feature: composite-heavy airframe for efficiency
+### Boeing 787-9 Dreamliner
+Stretched version of the 787-8, the most popular Dreamliner variant.
+- Seating: 296 passengers
+- Range: up to 7,635 nautical miles
+- Common operators: United, Delta, Air New Zealand, Qantas
 
-## Airbus A350
+### Airbus A350-900
+Airbus's answer to the 787, competing on long-haul efficiency.
+- Seating: 300–350 passengers
+- Range: up to 8,100 nautical miles
+- Engines: 2x Rolls-Royce Trent XWB
+- Common operators: Delta, American, Singapore Airlines, Cathay Pacific
 
-The Airbus A350 is a long-range wide-body twin-engine aircraft designed to compete with the Boeing 787 and 777. It is known for efficiency, modern cabin design, and long range.
+### Airbus A330-300
+An older wide-body still common on medium and long-haul international routes.
+- Seating: 250–300 passengers
+- Range: up to 6,350 nautical miles
+- Common operators: Delta, United, Hawaiian
 
-- Typical seating: about 300 to 410 passengers depending on variant
-- Common use: long-haul and ultra-long-haul flights
+### Boeing 767-300ER
+A medium wide-body used on transatlantic routes and domestic premium routes.
+- Seating: 218–269 passengers
+- Range: up to 6,025 nautical miles
+- Common operators: Delta, American, United
 
-## Regional Jets
+---
 
-Regional jets are smaller aircraft often used on shorter routes feeding larger airline hubs.
+## Identifying Aircraft in FlightGPT
 
-Examples include:
+When OpenSky returns flight data, it does not include aircraft type directly in the state vector. Aircraft type lookup requires cross-referencing the ICAO24 address against a registration database. However, callsign prefixes can help identify the airline:
 
-- Embraer E175
-- Embraer E190
-- Bombardier CRJ700
-- Bombardier CRJ900
-
-These aircraft are smaller than mainline narrow-body jets and are common on routes with lower passenger demand.
+| Callsign Prefix | Airline |
+|----------------|---------|
+| UAL | United Airlines |
+| DAL | Delta Air Lines |
+| AAL | American Airlines |
+| SWA | Southwest Airlines |
+| ASA | Alaska Airlines |
+| JBU | JetBlue Airways |
+| SKW | SkyWest Airlines |
+| FFT | Frontier Airlines |
+| NKS | Spirit Airlines |
+| SCX | Sun Country Airlines |

@@ -8,6 +8,7 @@ import { logger } from "../logger";
 const DEFAULT_EMBEDDING_MODEL = "text-embedding-3-small";
 const DEFAULT_RESULTS_LIMIT = 3;
 const STORE_FILENAME = "flightgpt-aviation-knowledge.json";
+const STORE_METADATA_FILENAME = "flightgpt-aviation-knowledge.meta.json";
 
 export type VectorStoreRecord = {
   id: string;
@@ -23,12 +24,23 @@ export type SimilarityMatch = {
   score: number;
 };
 
+export type VectorStoreMetadata = {
+  docSignature: string;
+  sourceFiles: string[];
+  recordCount: number;
+  updatedAt: string;
+};
+
 function getStoreDirectory(): string {
   return path.resolve(process.cwd(), process.env.CHROMA_PATH ?? "./chroma-db");
 }
 
 function getStoreFilePath(): string {
   return path.join(getStoreDirectory(), STORE_FILENAME);
+}
+
+function getStoreMetadataFilePath(): string {
+  return path.join(getStoreDirectory(), STORE_METADATA_FILENAME);
 }
 
 async function ensureStoreDirectory(): Promise<void> {
@@ -79,6 +91,19 @@ export async function getVectorStoreCount(): Promise<number> {
   return records.length;
 }
 
+export async function readVectorStoreMetadata(): Promise<VectorStoreMetadata | null> {
+  try {
+    const raw = await readFile(getStoreMetadataFilePath(), "utf8");
+    return JSON.parse(raw) as VectorStoreMetadata;
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+      return null;
+    }
+
+    throw error;
+  }
+}
+
 export async function overwriteVectorStore(
   records: VectorStoreRecord[],
 ): Promise<void> {
@@ -89,6 +114,24 @@ export async function overwriteVectorStore(
     event: "vector_store_written",
     storePath: getStoreFilePath(),
     recordCount: records.length,
+  });
+}
+
+export async function writeVectorStoreMetadata(
+  metadata: VectorStoreMetadata,
+): Promise<void> {
+  await ensureStoreDirectory();
+  await writeFile(
+    getStoreMetadataFilePath(),
+    JSON.stringify(metadata, null, 2),
+    "utf8",
+  );
+
+  logger.info({
+    event: "vector_store_metadata_written",
+    storePath: getStoreMetadataFilePath(),
+    docSignature: metadata.docSignature,
+    sourceFileCount: metadata.sourceFiles.length,
   });
 }
 
