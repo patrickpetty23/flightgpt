@@ -40,7 +40,7 @@ Aviation enthusiasts, curious travelers, and students who want to explore flight
 ### 3. Knowledge Base (RAG — ChromaDB)
 - Semantic search over curated aviation documents
 - Use cases: aircraft type lookups, aviation terminology, common airport codes, route information
-- Documents: 5 markdown files covering aircraft types, terminology, airports, OpenSky API reference, common routes
+- Documents: 6 markdown files covering aircraft types, terminology, airports, OpenSky API reference, common routes, and aviation math reference facts
 - Input: natural language query
 - Output: relevant document chunks with source attribution
 
@@ -62,7 +62,7 @@ Memory is session-scoped (in-memory array). Not persisted across server restarts
 
 A single chat page served by Express. Features:
 - Chat input and message history display
-- Streaming responses (stretch goal) — text appears token by token
+- Streaming responses (stretch goal) — the UI shows live agent step updates while tools run
 - Source attribution visible when RAG tool is used
 - Tool activity indicator showing which tool was called
 
@@ -76,7 +76,7 @@ A single chat page served by Express. Features:
 
 ## Success Criteria
 
-- All three required tools work and are correctly routed by the agent
+- All four tools work and are correctly routed by the agent
 - RAG returns results with source attribution
 - Conversation memory works across at least 3 turns
 - Web UI is functional and usable

@@ -46,6 +46,7 @@ flightgpt/
 │   └── logger.ts
 ├── docs/                   ← RAG source documents
 │   ├── aircraft-types.md
+│   ├── aviation-math-reference.md
 │   ├── aviation-terminology.md
 │   ├── airports-reference.md
 │   ├── opensky-api-reference.md
@@ -53,8 +54,13 @@ flightgpt/
 ├── public/
 │   └── index.html          ← chat UI
 ├── scripts/
+│   ├── chat.ts
 │   ├── test.sh
-│   └── embed-docs.sh
+│   ├── testAgent.ts
+│   ├── testCalculator.ts
+│   ├── testFlightLookup.ts
+│   ├── testKnowledgeBase.ts
+│   └── testWebSearch.ts
 ├── .env.example
 ├── .gitignore
 ├── package.json
@@ -68,7 +74,7 @@ flightgpt/
 |------|----------|----------------------|
 | `calculator` | Math expressions | Distance, duration, fuel, unit conversions |
 | `web_search` | Tavily web search | Current airport status, airline news, aircraft specs not in docs |
-| `knowledge_base` | ChromaDB RAG search | Aviation terminology, aircraft types, airport codes, route info |
+| `knowledge_base` | ChromaDB RAG search | Aviation terminology, aircraft types, airport codes, route info, aviation math reference facts |
 | `flight_lookup` | OpenSky Network API | Live flights near a location or by callsign |
 
 ## Environment Variables
@@ -86,7 +92,7 @@ CHROMA_PATH=./chroma-db  # persistent vector store location
 - All agent logic lives in `src/agent/agent.ts`
 - All tools are in `src/tools/` — one file per tool
 - RAG documents are plain markdown files in `docs/`
-- The vector store is embedded at startup via `src/rag/embedDocs.ts`
+- The vector store is embedded on first use via `src/rag/embedDocs.ts`
 - The Express server is in `src/server/server.ts` — it exposes `POST /chat` and serves `public/index.html`
 - Logging uses Pino — all tool calls log `{ tool, arguments, result }` as structured JSON
 - Never commit `.env` — use `.env.example` as the template

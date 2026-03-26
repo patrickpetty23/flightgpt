@@ -11,7 +11,7 @@
 | 5 | Flight lookup tool (4th tool) | ✅ Complete |
 | 6 | Web UI | ✅ Complete |
 | 7 | Streaming | ✅ Complete |
-| 8 | Polish & deliverables | ⬜ Not started |
+| 8 | Polish & deliverables | ✅ Complete |
 
 ---
 
@@ -149,23 +149,23 @@ full response before returning anything to the UI.
 
 Goal: everything submitted, demo recorded, repo clean.
 
-- [ ] Write `README.md`
-  - [ ] What FlightGPT is
-  - [ ] All four tools described
-  - [ ] Setup instructions (clone, install, configure .env, run)
-  - [ ] How to embed docs on first run
-- [ ] Final review of all infrastructure files
-- [ ] Verify 5+ meaningful commits in git history
-- [ ] Verify `.env` is not committed
-- [ ] Record 2-minute demo video (follow demo script in MVP.md)
-- [ ] Submit GitHub repo link + demo video
-- [ ] Commit: `chore: final polish and README`
+- [x] Write `README.md`
+  - [x] What FlightGPT is
+  - [x] All four tools described
+  - [x] Setup instructions (clone, install, configure .env, run)
+  - [x] How to embed docs on first run
+- [x] Final review of all infrastructure files
+- [x] Verify 5+ meaningful commits in git history
+- [x] Verify `.env` is not committed
+- [x] Record 2-minute demo video (follow demo script in MVP.md)
+- [x] Submit GitHub repo link + demo video
+- [x] Commit: `chore: final polish and README`
 
 ---
 
 ## Stretch Goals Tracker
 
 - [x] Streaming in web UI (Phase 7)
-- [ ] 4th custom tool — flight_lookup (Phase 5)
-- [ ] Persistent vector store — ChromaDB (Phase 4)
+- [x] 4th custom tool — flight_lookup (Phase 5)
+- [x] Persistent vector store — ChromaDB (Phase 4)
 - [ ] Agent proposal write-up (optional — identify a feature in an existing project)
