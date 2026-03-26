@@ -163,6 +163,71 @@ Goal: everything submitted, demo recorded, repo clean.
 
 ---
 
+## Phase 9 — Live Flight Map
+
+Goal: add a /map page showing real-time aircraft positions on an 
+interactive map, updating every 10 seconds. Reuses the OpenSky 
+integration already built in flightLookup.ts.
+
+### Backend
+- [ ] Add GET /api/flights to src/server/server.ts
+      - Calls OpenSky API for continental US bounding box:
+        lamin=24.5, lamax=49.5, lomin=-125.0, lomax=-66.0
+      - Returns JSON array of flights with fields:
+        { callsign, lat, lon, altitudeFt, speedKnots, heading, country }
+      - Convert OpenSky raw values on the server:
+        altitude: meters × 3.281 → feet
+        speed: m/s × 1.944 → knots
+        heading: index 10 (true_track)
+      - Filter out: null lat/lon, on_ground === true, empty callsign
+      - Handle OpenSky errors gracefully — return empty array, 
+        don't crash the server
+- [ ] Add GET /map route serving public/map.html
+
+### Frontend — public/map.html (single file, inline CSS/JS)
+- [ ] Load Leaflet.js and CSS from CDN:
+      https://unpkg.com/leaflet@1.9.4/dist/leaflet.js
+      https://unpkg.com/leaflet@1.9.4/dist/leaflet.css
+- [ ] Initialize map centered on US (lat 39, lon -98, zoom 4)
+- [ ] Use dark tile layer matching FlightGPT aesthetic:
+      https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png
+- [ ] Create a custom SVG plane icon using Leaflet's DivIcon:
+      - Small filled triangle or arrow shape pointing up (north)
+      - Rotate the icon using CSS transform: rotate({heading}deg)
+        so each plane points in its actual direction of travel
+      - All icons the same size (16×16px) — OpenSky free tier 
+        does not provide aircraft type so we cannot size by 
+        aircraft category without a separate API
+      - Color: white with a subtle glow, visible on dark map
+- [ ] On load: fetch /api/flights, place a marker per flight
+- [ ] Every 10 seconds: fetch /api/flights again
+      - Update existing markers to new positions using setLatLng
+      - Add markers for new flights that appeared
+      - Remove markers for flights that disappeared
+      - Do NOT clear and redraw all markers — that causes flicker
+- [ ] Each marker popup on click shows:
+      ✈ {CALLSIGN}
+      Altitude: {altitudeFt} ft
+      Speed: {speedKnots} kt  
+      Heading: {heading}°
+      Country: {country}
+      [Ask FlightGPT] button — opens /index.html with query 
+      pre-filled as "Tell me about flight {callsign}"
+- [ ] Flight counter in top-right corner: "{n} aircraft tracked"
+      updates with each refresh
+- [ ] Nav link in both pages:
+      /map → "💬 Open Chat"
+      /index.html → "🗺 Live Map"
+
+### Testing
+- [ ] Open /map — planes appear over the US within 2 seconds
+- [ ] Wait 10 seconds — positions update without page flicker
+- [ ] Click a marker — popup shows flight details
+- [ ] Click "Ask FlightGPT" — chat opens with callsign pre-filled
+- [ ] Commit: feat: live flight map with Leaflet and OpenSky
+
+---
+
 ## Stretch Goals Tracker
 
 - [x] Streaming in web UI (Phase 7)
