@@ -125,13 +125,27 @@ Goal: chat page accessible at localhost:3000, all tools fire from browser.
 
 ## Phase 7 — Streaming (Stretch)
 
-Goal: responses stream token by token in the UI.
+Goal: show the agent's reasoning steps in real time so the user 
+sees the agent working instead of waiting for a final answer.
 
-- [ ] Switch `POST /chat` to SSE (`text/event-stream`)
-- [ ] Use `agent.stream()` instead of `agent.invoke()`
-- [ ] Update frontend to consume SSE and append tokens as they arrive
-- [ ] Test: visible streaming in browser
-- [ ] Commit: `feat: streaming responses via SSE`
+This is based on the LangGraph agent.stream() API which emits 
+each step of the ReAct loop as it happens — tool calls, tool 
+results, and the final response — rather than waiting for the 
+full response before returning anything to the UI.
+
+- [] Add POST /chat/stream endpoint using SSE (text/event-stream)
+- [] Use agent.stream() instead of agent.invoke()
+- [] Emit each agent step as a server-sent event as it arrives
+- [] Frontend shows a "FlightGPT is thinking..." indicator while 
+      the agent is working through its reasoning steps
+- [] Final assistant response is displayed when streaming completes
+- [] Test: user can see the agent is active rather than waiting 
+      in silence for a response
+- [] Commit: feat: streaming responses via SSE
+
+Note: this satisfies the course definition of streaming as described 
+in Dev Unit 7. Word-by-word token streaming (like ChatGPT) is a 
+more advanced pattern beyond the scope of this assignment.
 
 ---
 
