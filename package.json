@@ -9,6 +9,7 @@
     "chat": "node dist/scripts/chat.js",
     "test:agent": "node dist/scripts/testAgent.js",
     "test:calculator": "node dist/scripts/testCalculator.js",
+    "test:flight-lookup": "node dist/scripts/testFlightLookup.js",
     "test:knowledge-base": "node dist/scripts/testKnowledgeBase.js",
     "test:web-search": "node dist/scripts/testWebSearch.js"
   },

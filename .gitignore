@@ -3,3 +3,4 @@ node_modules
 dist
 chroma-db
 .env.development
+.DS_Store

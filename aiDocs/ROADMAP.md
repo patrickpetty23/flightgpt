@@ -8,7 +8,7 @@
 | 2 | Core tools (calculator + web search) | ✅ Complete |
 | 3 | Agent wiring & basic chat | ✅ Complete |
 | 4 | RAG knowledge base | ✅ Complete |
-| 5 | Flight lookup tool (4th tool) | ⬜ Not started |
+| 5 | Flight lookup tool (4th tool) | ✅ Complete |
 | 6 | Web UI | ⬜ Not started |
 | 7 | Streaming | ⬜ Not started |
 | 8 | Polish & deliverables | ⬜ Not started |
@@ -93,15 +93,15 @@ Goal: ChromaDB running, 5 docs embedded, knowledge_base tool works with source a
 
 Goal: live flight data from OpenSky Network, 4th tool working.
 
-- [ ] Build `src/tools/flightLookup.ts`
-  - [ ] OpenSky Network REST API call (no auth required)
-  - [ ] Accept location name → convert to bounding box OR accept callsign
-  - [ ] Format response: callsign, origin country, altitude, speed, coordinates
-  - [ ] Handle empty results gracefully
-  - [ ] Async with try/catch
-- [ ] Add flight_lookup tool to agent
-- [ ] Test: "what's flying over Utah right now?" → should call flight_lookup
-- [ ] Commit: `feat: flight lookup tool via OpenSky Network`
+- [x] Build `src/tools/flightLookup.ts`
+  - [x] OpenSky Network REST API call (no auth required)
+  - [x] Accept location name → convert to bounding box OR accept callsign
+  - [x] Format response: callsign, origin country, altitude, speed, coordinates
+  - [x] Handle empty results gracefully
+  - [x] Async with try/catch
+- [x] Add flight_lookup tool to agent
+- [x] Test: "what's flying over Utah right now?" → should call flight_lookup
+- [x] Commit: `feat: flight lookup tool via OpenSky Network`
 
 ---
 

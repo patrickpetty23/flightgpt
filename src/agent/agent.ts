@@ -3,6 +3,7 @@ import { createAgent } from "langchain";
 
 import { logger } from "../logger";
 import { calculatorTool } from "../tools/calculator";
+import { flightLookupTool } from "../tools/flightLookup";
 import { knowledgeBaseTool } from "../tools/knowledgeBase";
 import { webSearchTool } from "../tools/webSearch";
 
@@ -78,9 +79,9 @@ export function createFlightGptAgent() {
 
   return createAgent({
     model: llm,
-    tools: [calculatorTool, knowledgeBaseTool, webSearchTool],
+    tools: [calculatorTool, knowledgeBaseTool, flightLookupTool, webSearchTool],
     systemPrompt:
-      "You are FlightGPT, an aviation assistant. Use calculator for math and unit conversions. Use knowledge_base for aviation definitions, aircraft facts, airport codes, and route reference information. Use web_search only for current or changing real-world information such as delays, airport status, and airline news.",
+      "You are FlightGPT, an aviation assistant. Use calculator for math and unit conversions. Use knowledge_base for aviation definitions, aircraft facts, airport codes, and route reference information. Use flight_lookup for live aircraft over supported places or by callsign. Use web_search only for current or changing real-world information such as delays, airport status, airline news, or details not covered by local docs or flight lookup.",
   });
 }
 

@@ -4,6 +4,7 @@ async function main(): Promise<void> {
   const prompts = [
     "How far is 2186 miles in kilometers?",
     "What is a squawk code?",
+    "What's flying over Utah right now?",
     "Are there any delays at JFK today?",
   ];
 
