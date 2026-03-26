@@ -7,7 +7,7 @@
 | 1 | Project setup & infrastructure | ✅ Complete |
 | 2 | Core tools (calculator + web search) | ✅ Complete |
 | 3 | Agent wiring & basic chat | ✅ Complete |
-| 4 | RAG knowledge base | ⬜ Not started |
+| 4 | RAG knowledge base | ✅ Complete |
 | 5 | Flight lookup tool (4th tool) | ⬜ Not started |
 | 6 | Web UI | ⬜ Not started |
 | 7 | Streaming | ⬜ Not started |
@@ -71,21 +71,21 @@ Goal: agent runs in terminal with two tools, ReAct loop visible in logs.
 
 Goal: ChromaDB running, 5 docs embedded, knowledge_base tool works with source attribution.
 
-- [ ] Write 5 aviation documents in `docs/`
-  - [ ] `aircraft-types.md`
-  - [ ] `aviation-terminology.md`
-  - [ ] `airports-reference.md`
-  - [ ] `opensky-api-reference.md`
-  - [ ] `common-routes.md`
-- [ ] Build `src/rag/vectorStore.ts` — ChromaDB client setup
-- [ ] Build `src/rag/embedDocs.ts` — load docs, chunk, embed, store (skip if already embedded)
-- [ ] Build `src/tools/knowledgeBase.ts`
-  - [ ] Semantic search with `similaritySearch(query, 3)`
-  - [ ] Returns results with source attribution (`[Source: filename]`)
-  - [ ] Async with try/catch
-- [ ] Add knowledge_base tool to agent
-- [ ] Test: "what is a squawk code?" → should hit RAG not web search
-- [ ] Commit: `feat: RAG knowledge base with ChromaDB`
+- [x] Write 5 aviation documents in `docs/`
+  - [x] `aircraft-types.md`
+  - [x] `aviation-terminology.md`
+  - [x] `airports-reference.md`
+  - [x] `opensky-api-reference.md`
+  - [x] `common-routes.md`
+- [x] Build `src/rag/vectorStore.ts` — ChromaDB client setup
+- [x] Build `src/rag/embedDocs.ts` — load docs, chunk, embed, store (skip if already embedded)
+- [x] Build `src/tools/knowledgeBase.ts`
+  - [x] Semantic search with `similaritySearch(query, 3)`
+  - [x] Returns results with source attribution (`[Source: filename]`)
+  - [x] Async with try/catch
+- [x] Add knowledge_base tool to agent
+- [x] Test: "what is a squawk code?" → should hit RAG not web search
+- [x] Commit: `feat: RAG knowledge base with ChromaDB`
 
 ---
 

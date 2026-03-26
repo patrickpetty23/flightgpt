@@ -3,6 +3,7 @@ import { invokeFlightGptAgent } from "../src/agent/agent";
 async function main(): Promise<void> {
   const prompts = [
     "How far is 2186 miles in kilometers?",
+    "What is a squawk code?",
     "Are there any delays at JFK today?",
   ];
 

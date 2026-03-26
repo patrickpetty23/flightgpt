@@ -3,6 +3,7 @@ import { createAgent } from "langchain";
 
 import { logger } from "../logger";
 import { calculatorTool } from "../tools/calculator";
+import { knowledgeBaseTool } from "../tools/knowledgeBase";
 import { webSearchTool } from "../tools/webSearch";
 
 const DEFAULT_MODEL = process.env.ANTHROPIC_MODEL ?? "claude-haiku-4-5-20251001";
@@ -77,9 +78,9 @@ export function createFlightGptAgent() {
 
   return createAgent({
     model: llm,
-    tools: [calculatorTool, webSearchTool],
+    tools: [calculatorTool, knowledgeBaseTool, webSearchTool],
     systemPrompt:
-      "You are FlightGPT, an aviation assistant. Use calculator for math and unit conversions. Use web_search for current aviation information.",
+      "You are FlightGPT, an aviation assistant. Use calculator for math and unit conversions. Use knowledge_base for aviation definitions, aircraft facts, airport codes, and route reference information. Use web_search only for current or changing real-world information such as delays, airport status, and airline news.",
   });
 }
 

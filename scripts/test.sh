@@ -2,7 +2,8 @@
 
 set -euo pipefail
 
-echo "Running FlightGPT Phase 2 tool tests"
+echo "Running FlightGPT tool tests"
 npm run build
 npm run test:calculator
 npm run test:web-search
+npm run test:knowledge-base
