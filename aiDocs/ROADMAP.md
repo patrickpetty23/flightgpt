@@ -143,10 +143,6 @@ full response before returning anything to the UI.
       in silence for a response
 - [x] Commit: `feat: add streaming responses via SSE`
 
-Note: this satisfies the course definition of streaming as described 
-in Dev Unit 7. Word-by-word token streaming (like ChatGPT) is a 
-more advanced pattern beyond the scope of this assignment.
-
 ---
 
 ## Phase 8 — Polish & Deliverables
