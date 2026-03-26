@@ -6,6 +6,8 @@
   "scripts": {
     "build": "tsc",
     "test": "bash scripts/test.sh",
+    "chat": "node dist/scripts/chat.js",
+    "test:agent": "node dist/scripts/testAgent.js",
     "test:calculator": "node dist/scripts/testCalculator.js",
     "test:web-search": "node dist/scripts/testWebSearch.js"
   },

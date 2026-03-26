@@ -6,7 +6,7 @@
 |-------|-------|--------|
 | 1 | Project setup & infrastructure | ✅ Complete |
 | 2 | Core tools (calculator + web search) | ✅ Complete |
-| 3 | Agent wiring & basic chat | ⬜ Not started |
+| 3 | Agent wiring & basic chat | ✅ Complete |
 | 4 | RAG knowledge base | ⬜ Not started |
 | 5 | Flight lookup tool (4th tool) | ⬜ Not started |
 | 6 | Web UI | ⬜ Not started |
@@ -55,15 +55,15 @@ Goal: calculator and web search tools built, tested independently.
 
 Goal: agent runs in terminal with two tools, ReAct loop visible in logs.
 
-- [ ] Build `src/agent/agent.ts`
-  - [ ] Initialize Claude model (claude-haiku-3-5)
-  - [ ] Wire calculator + web search tools
-  - [ ] Create agent with `createReactAgent`
-  - [ ] Set `recursionLimit: 10`
-- [ ] Add structured logging for every tool call (`{ tool, arguments, result }`)
-- [ ] Build simple terminal chat loop to test
-- [ ] Verify agent picks correct tool for math vs web questions
-- [ ] Commit: `feat: agent wired with calculator and web search`
+- [x] Build `src/agent/agent.ts`
+  - [x] Initialize Claude model (claude-haiku-3-5)
+  - [x] Wire calculator + web search tools
+  - [x] Create agent with `createReactAgent`
+  - [x] Set `recursionLimit: 10`
+- [x] Add structured logging for every tool call (`{ tool, arguments, result }`)
+- [x] Build simple terminal chat loop to test
+- [x] Verify agent picks correct tool for math vs web questions
+- [x] Commit: `feat: agent wired with calculator and web search`
 
 ---
 
