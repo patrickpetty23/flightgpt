@@ -2,5 +2,7 @@
 
 set -euo pipefail
 
-echo "FlightGPT Phase 1 scaffold check"
-echo "No tool tests are implemented yet."
+echo "Running FlightGPT Phase 2 tool tests"
+npm run build
+npm run test:calculator
+npm run test:web-search

@@ -5,7 +5,7 @@
 | Phase | Focus | Status |
 |-------|-------|--------|
 | 1 | Project setup & infrastructure | ✅ Complete |
-| 2 | Core tools (calculator + web search) | ⬜ Not started |
+| 2 | Core tools (calculator + web search) | ✅ Complete |
 | 3 | Agent wiring & basic chat | ⬜ Not started |
 | 4 | RAG knowledge base | ⬜ Not started |
 | 5 | Flight lookup tool (4th tool) | ⬜ Not started |
@@ -35,19 +35,19 @@ Goal: repo is scaffolded, AI tools can orient from context.md, no secrets commit
 
 Goal: calculator and web search tools built, tested independently.
 
-- [ ] Build `src/tools/calculator.ts`
-  - [ ] Safe math evaluation (use `mathjs` in production)
-  - [ ] Returns string result
-  - [ ] Catches and returns errors gracefully
-  - [ ] Descriptive `when to use` description
-- [ ] Build `src/tools/webSearch.ts`
-  - [ ] Tavily integration
-  - [ ] maxResults: 3
-  - [ ] Formats results with title, content, URL
-  - [ ] Async with try/catch
-- [ ] Write basic test for each tool (call directly, log output)
-- [ ] Update `scripts/test.sh` to run tool tests
-- [ ] Commit: `feat: calculator and web search tools`
+- [x] Build `src/tools/calculator.ts`
+  - [x] Safe math evaluation (use `mathjs` in production)
+  - [x] Returns string result
+  - [x] Catches and returns errors gracefully
+  - [x] Descriptive `when to use` description
+- [x] Build `src/tools/webSearch.ts`
+  - [x] Tavily integration
+  - [x] maxResults: 3
+  - [x] Formats results with title, content, URL
+  - [x] Async with try/catch
+- [x] Write basic test for each tool (call directly, log output)
+- [x] Update `scripts/test.sh` to run tool tests
+- [x] Commit: `feat: calculator and web search tools`
 
 ---
 
