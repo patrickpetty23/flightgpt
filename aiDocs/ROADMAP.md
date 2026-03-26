@@ -119,7 +119,7 @@ Goal: chat page accessible at localhost:3000, all tools fire from browser.
   - [x] Message display area (user vs assistant styled differently)
   - [x] Basic CSS — clean and functional
 - [x] Test full flow from browser: all 4 tools reachable
-- [ ] Commit: `feat: web UI and Express server`
+- [x] Commit: `feat: web UI and Express server`
 
 ---
 
