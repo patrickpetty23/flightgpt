@@ -10,7 +10,7 @@
 | 4 | RAG knowledge base | ✅ Complete |
 | 5 | Flight lookup tool (4th tool) | ✅ Complete |
 | 6 | Web UI | ✅ Complete |
-| 7 | Streaming | ⬜ Not started |
+| 7 | Streaming | ✅ Complete |
 | 8 | Polish & deliverables | ⬜ Not started |
 
 ---
@@ -133,15 +133,15 @@ each step of the ReAct loop as it happens — tool calls, tool
 results, and the final response — rather than waiting for the 
 full response before returning anything to the UI.
 
-- [] Add POST /chat/stream endpoint using SSE (text/event-stream)
-- [] Use agent.stream() instead of agent.invoke()
-- [] Emit each agent step as a server-sent event as it arrives
-- [] Frontend shows a "FlightGPT is thinking..." indicator while 
+- [x] Add POST /chat/stream endpoint using SSE (text/event-stream)
+- [x] Use agent.stream() instead of agent.invoke()
+- [x] Emit each agent step as a server-sent event as it arrives
+- [x] Frontend shows a "FlightGPT is thinking..." indicator while 
       the agent is working through its reasoning steps
-- [] Final assistant response is displayed when streaming completes
-- [] Test: user can see the agent is active rather than waiting 
+- [x] Final assistant response is displayed when streaming completes
+- [x] Test: user can see the agent is active rather than waiting 
       in silence for a response
-- [] Commit: feat: streaming responses via SSE
+- [x] Commit: `feat: add streaming responses via SSE`
 
 Note: this satisfies the course definition of streaming as described 
 in Dev Unit 7. Word-by-word token streaming (like ChatGPT) is a 
@@ -169,7 +169,7 @@ Goal: everything submitted, demo recorded, repo clean.
 
 ## Stretch Goals Tracker
 
-- [ ] Streaming in web UI (Phase 7)
+- [x] Streaming in web UI (Phase 7)
 - [ ] 4th custom tool — flight_lookup (Phase 5)
 - [ ] Persistent vector store — ChromaDB (Phase 4)
 - [ ] Agent proposal write-up (optional — identify a feature in an existing project)

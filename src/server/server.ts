@@ -3,7 +3,11 @@ import path from "node:path";
 import express from "express";
 import { z } from "zod";
 
-import { invokeFlightGptAgent, type FlightGptChatMessage } from "../agent/agent";
+import {
+  invokeFlightGptAgent,
+  streamFlightGptAgent,
+  type FlightGptChatMessage,
+} from "../agent/agent";
 import { logger } from "../logger";
 
 const PORT = Number(process.env.PORT ?? "3000");
@@ -24,6 +28,13 @@ function getPublicDirectory(): string {
 
 function getIndexFilePath(): string {
   return path.join(getPublicDirectory(), "index.html");
+}
+
+function writeSseEvent(
+  response: express.Response,
+  payload: Record<string, unknown>,
+): void {
+  response.write(`data: ${JSON.stringify(payload)}\n\n`);
 }
 
 export function createServer() {
@@ -70,6 +81,103 @@ export function createServer() {
       response.status(500).json({
         error: message,
       });
+    }
+  });
+
+  app.post("/chat/stream", async (request, response) => {
+    let parsedRequest: z.infer<typeof chatRequestSchema>;
+
+    try {
+      parsedRequest = chatRequestSchema.parse(request.body);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        response.status(400).json({
+          error: "Invalid chat payload.",
+          details: error.flatten(),
+        });
+        return;
+      }
+
+      const message =
+        error instanceof Error ? error.message : "Unknown server error.";
+
+      response.status(500).json({
+        error: message,
+      });
+      return;
+    }
+
+    const { message, history } = parsedRequest;
+    const flightHistory = history as FlightGptChatMessage[];
+    const abortController = new AbortController();
+
+    response.setHeader("Content-Type", "text/event-stream; charset=utf-8");
+    response.setHeader("Cache-Control", "no-cache, no-transform");
+    response.setHeader("Connection", "keep-alive");
+
+    if (typeof response.flushHeaders === "function") {
+      response.flushHeaders();
+    }
+
+    request.on("aborted", () => {
+      abortController.abort();
+    });
+
+    response.on("close", () => {
+      if (!response.writableEnded) {
+        abortController.abort();
+      }
+    });
+
+    response.on("error", () => {
+      abortController.abort();
+    });
+
+    writeSseEvent(response, {
+      type: "step",
+      stepType: "status",
+      label: "FlightGPT is thinking...",
+    });
+
+    try {
+      const reply = await streamFlightGptAgent(message, flightHistory, {
+        signal: abortController.signal,
+        onStep: (step) => {
+          writeSseEvent(response, {
+            type: "step",
+            stepType: step.type,
+            label: step.label,
+            tool: step.tool,
+          });
+        },
+      });
+
+      const updatedHistory: FlightGptChatMessage[] = [
+        ...flightHistory,
+        { role: "user", content: message },
+        { role: "assistant", content: reply },
+      ];
+
+      writeSseEvent(response, {
+        type: "done",
+        reply,
+        history: updatedHistory,
+      });
+      response.end();
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Unknown server error.";
+
+      logger.error({
+        event: "chat_stream_failed",
+        error: message,
+      });
+
+      writeSseEvent(response, {
+        type: "error",
+        error: message,
+      });
+      response.end();
     }
   });
 
