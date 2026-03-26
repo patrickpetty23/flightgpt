@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FlightGPT</title>
+    <link rel="icon" type="image/svg+xml" href="./icons8-airplane-50.png" />
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: #eff5ff;
+        background:
+          linear-gradient(
+            180deg,
+            rgba(7, 15, 28, 0.45) 0%,
+            rgba(7, 15, 28, 0.58) 100%
+          ),
+          url("./flightgpt-dreamliner-bg.png") center center / cover no-repeat fixed;
+      }
+
+      .app {
+        max-width: 920px;
+        margin: 0 auto;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        padding: 24px 16px;
+      }
+
+      .header {
+        margin-bottom: 16px;
+        color: #f5f8ff;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+      }
+
+      .header h1 {
+        margin: 0 0 8px;
+        font-size: 2rem;
+      }
+
+      .header p {
+        margin: 0;
+        color: rgba(245, 248, 255, 0.9);
+      }
+
+      .chat-shell {
+        background: rgba(255, 255, 255, 0.28);
+        backdrop-filter: blur(6px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 16px;
+        box-shadow: 0 18px 40px rgba(7, 15, 28, 0.22);
+        display: flex;
+        flex-direction: column;
+        min-height: 70vh;
+        overflow: hidden;
+      }
+
+      .messages {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .message {
+        max-width: 85%;
+        padding: 14px 16px;
+        border-radius: 14px;
+        line-height: 1.5;
+        white-space: pre-wrap;
+      }
+
+      .message.user {
+        align-self: flex-end;
+        background: rgba(27, 110, 243, 0.72);
+        color: #ffffff;
+      }
+
+      .message.assistant {
+        align-self: flex-start;
+        background: rgba(240, 245, 252, 0.42);
+        color: #10233f;
+      }
+
+      .message.system {
+        align-self: center;
+        background: rgba(237, 242, 247, 0.35);
+        color: #49617f;
+        font-size: 0.95rem;
+      }
+
+      .composer {
+        border-top: 1px solid rgba(201, 212, 224, 0.28);
+        padding: 16px;
+        display: flex;
+        gap: 12px;
+        background: rgba(251, 253, 255, 0.24);
+      }
+
+      .composer textarea {
+        flex: 1;
+        resize: vertical;
+        min-height: 56px;
+        max-height: 180px;
+        border: 1px solid rgba(201, 212, 224, 0.45);
+        border-radius: 12px;
+        padding: 14px;
+        font: inherit;
+        background: rgba(255, 255, 255, 0.34);
+        color: #10233f;
+      }
+
+      .composer textarea::placeholder {
+        color: rgba(16, 35, 63, 0.62);
+      }
+
+      .composer button {
+        align-self: flex-end;
+        border: none;
+        border-radius: 12px;
+        background: #10233f;
+        color: #ffffff;
+        padding: 14px 18px;
+        font: inherit;
+        cursor: pointer;
+      }
+
+      .composer button:disabled {
+        opacity: 0.6;
+        cursor: wait;
+      }
+
+      .status {
+        min-height: 24px;
+        padding: 0 16px 16px;
+        color: rgba(16, 35, 63, 0.82);
+        font-size: 0.95rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app">
+      <header class="header">
+        <h1>FlightGPT</h1>
+        <p>
+          Ask about live flights, aviation terms, route distances, and airport status.
+        </p>
+      </header>
+
+      <section class="chat-shell">
+        <div class="messages" id="messages"></div>
+        <form class="composer" id="chat-form">
+          <textarea
+            id="message-input"
+            name="message"
+            placeholder="Ask something like: What's flying over Utah right now?"
+            required
+          ></textarea>
+          <button id="send-button" type="submit">Send</button>
+        </form>
+        <div class="status" id="status"></div>
+      </section>
+    </main>
+
+    <script>
+      const messagesEl = document.getElementById("messages");
+      const formEl = document.getElementById("chat-form");
+      const inputEl = document.getElementById("message-input");
+      const sendButtonEl = document.getElementById("send-button");
+      const statusEl = document.getElementById("status");
+
+      let history = [];
+
+      function renderMessage(role, content) {
+        const messageEl = document.createElement("div");
+        messageEl.className = `message ${role}`;
+        messageEl.textContent = content;
+        messagesEl.appendChild(messageEl);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+
+      function setBusy(isBusy, statusText = "") {
+        inputEl.disabled = isBusy;
+        sendButtonEl.disabled = isBusy;
+        statusEl.textContent = statusText;
+      }
+
+      renderMessage(
+        "assistant",
+        "Hello! I am FlightGPT. Ask me about aircraft, routes, airport delays, or flights over a supported location like Utah or JFK.",
+      );
+
+      inputEl.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" && !event.shiftKey) {
+          event.preventDefault();
+          formEl.requestSubmit();
+        }
+      });
+
+      formEl.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const message = inputEl.value.trim();
+
+        if (!message) {
+          return;
+        }
+
+        renderMessage("user", message);
+        inputEl.value = "";
+        setBusy(true, "FlightGPT is thinking...");
+
+        try {
+          const response = await fetch("/chat", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              message,
+              history,
+            }),
+          });
+
+          const payload = await response.json();
+
+          if (!response.ok) {
+            throw new Error(payload.error || "Request failed.");
+          }
+
+          history = Array.isArray(payload.history) ? payload.history : history;
+          renderMessage("assistant", payload.reply || "No reply returned.");
+          setBusy(false, "");
+        } catch (error) {
+          const messageText =
+            error instanceof Error ? error.message : "Unknown UI error.";
+          renderMessage("system", `Error: ${messageText}`);
+          setBusy(false, "Request failed.");
+        }
+      });
+    </script>
+  </body>
+</html>

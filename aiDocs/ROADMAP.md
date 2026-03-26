@@ -9,7 +9,7 @@
 | 3 | Agent wiring & basic chat | ✅ Complete |
 | 4 | RAG knowledge base | ✅ Complete |
 | 5 | Flight lookup tool (4th tool) | ✅ Complete |
-| 6 | Web UI | ⬜ Not started |
+| 6 | Web UI | ✅ Complete |
 | 7 | Streaming | ⬜ Not started |
 | 8 | Polish & deliverables | ⬜ Not started |
 
@@ -109,16 +109,16 @@ Goal: live flight data from OpenSky Network, 4th tool working.
 
 Goal: chat page accessible at localhost:3000, all tools fire from browser.
 
-- [ ] Build `src/server/server.ts`
-  - [ ] Express app, serve `public/index.html` on `GET /`
-  - [ ] `POST /chat` endpoint accepts `{ message, history }`
-  - [ ] Manages conversation memory (message history array)
-  - [ ] Returns agent response as JSON
-- [ ] Build `public/index.html`
-  - [ ] Chat input + send button
-  - [ ] Message display area (user vs assistant styled differently)
-  - [ ] Basic CSS — clean and functional
-- [ ] Test full flow from browser: all 4 tools reachable
+- [x] Build `src/server/server.ts`
+  - [x] Express app, serve `public/index.html` on `GET /`
+  - [x] `POST /chat` endpoint accepts `{ message, history }`
+  - [x] Manages conversation memory (message history array)
+  - [x] Returns agent response as JSON
+- [x] Build `public/index.html`
+  - [x] Chat input + send button
+  - [x] Message display area (user vs assistant styled differently)
+  - [x] Basic CSS — clean and functional
+- [x] Test full flow from browser: all 4 tools reachable
 - [ ] Commit: `feat: web UI and Express server`
 
 ---

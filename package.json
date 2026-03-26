@@ -5,6 +5,7 @@
   "main": "dist/server/server.js",
   "scripts": {
     "build": "tsc",
+    "start": "node dist/src/server/server.js",
     "test": "bash scripts/test.sh",
     "chat": "node dist/scripts/chat.js",
     "test:agent": "node dist/scripts/testAgent.js",
