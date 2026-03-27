@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FlightGPT — Live Map</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=3" />
+    <link rel="shortcut icon" type="image/png" href="/favicon-32x32.png?v=3" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #0a0f1a;
+        color: #eff5ff;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px;
+        background: rgba(10, 15, 26, 0.95);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        z-index: 1000;
+      }
+
+      .top-bar h1 {
+        font-size: 1.2rem;
+        font-weight: 700;
+      }
+
+      .top-bar a {
+        color: #7eb8ff;
+        text-decoration: none;
+        font-size: 0.95rem;
+      }
+
+      .top-bar a:hover { text-decoration: underline; }
+
+      #map { flex: 1; }
+
+      .flight-counter {
+        position: absolute;
+        top: 62px;
+        right: 12px;
+        z-index: 1000;
+        background: rgba(10, 15, 26, 0.85);
+        backdrop-filter: blur(6px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        padding: 8px 14px;
+        font-size: 0.9rem;
+        color: #c8daf0;
+        pointer-events: none;
+      }
+
+      .leaflet-popup-content-wrapper {
+        background: rgba(15, 22, 40, 0.92) !important;
+        color: #dce8f7 !important;
+        border-radius: 10px !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        backdrop-filter: blur(8px);
+      }
+
+      .leaflet-popup-tip { background: rgba(15, 22, 40, 0.92) !important; }
+
+      .popup-callsign {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+
+      .popup-detail {
+        font-size: 0.88rem;
+        line-height: 1.6;
+        color: #a8bdd4;
+      }
+
+      .popup-ask-btn {
+        display: inline-block;
+        margin-top: 8px;
+        padding: 6px 14px;
+        font-size: 0.85rem;
+        background: #1b6ef3;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      .popup-ask-btn:hover { background: #145ad4; }
+    </style>
+  </head>
+  <body>
+    <div class="top-bar">
+      <h1>FlightGPT — Live Map</h1>
+      <a href="/">💬 Open Chat</a>
+    </div>
+    <div id="map"></div>
+    <div class="flight-counter" id="flight-counter">Loading…</div>
+
+    <script>
+      const map = L.map("map", { zoomControl: true }).setView([39, -98], 4);
+
+      L.tileLayer(
+        "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
+        {
+          maxZoom: 18,
+          attribution:
+            '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>',
+        },
+      ).addTo(map);
+
+      const markers = {};
+      const counterEl = document.getElementById("flight-counter");
+
+      function createPlaneIcon(heading) {
+        return L.divIcon({
+          className: "",
+          iconSize: [16, 16],
+          iconAnchor: [8, 8],
+          popupAnchor: [0, -10],
+          html: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" style="transform:rotate(${heading}deg);filter:drop-shadow(0 0 3px rgba(255,255,255,0.6))"><polygon points="8,0 13,14 8,11 3,14" fill="#fff"/></svg>`,
+        });
+      }
+
+      function buildPopup(f) {
+        const askUrl = `/?q=${encodeURIComponent("Tell me about flight " + f.callsign)}`;
+        return `
+          <div class="popup-callsign">✈ ${f.callsign}</div>
+          <div class="popup-detail">
+            Altitude: ${f.altitudeFt.toLocaleString()} ft<br>
+            Speed: ${f.speedKnots} kt<br>
+            Heading: ${f.heading}°<br>
+            Country: ${f.country}
+          </div>
+          <a class="popup-ask-btn" href="${askUrl}">Ask FlightGPT</a>
+        `;
+      }
+
+      async function fetchFlights() {
+        try {
+          const res = await fetch("/api/flights");
+          if (!res.ok) return [];
+          return await res.json();
+        } catch {
+          return [];
+        }
+      }
+
+      function updateMarkers(flights) {
+        const seen = new Set();
+
+        for (const f of flights) {
+          seen.add(f.callsign);
+
+          if (markers[f.callsign]) {
+            const m = markers[f.callsign];
+            m.setLatLng([f.lat, f.lon]);
+            m.setIcon(createPlaneIcon(f.heading));
+            m.setPopupContent(buildPopup(f));
+          } else {
+            const m = L.marker([f.lat, f.lon], {
+              icon: createPlaneIcon(f.heading),
+            })
+              .bindPopup(buildPopup(f))
+              .addTo(map);
+            markers[f.callsign] = m;
+          }
+        }
+
+        for (const cs of Object.keys(markers)) {
+          if (!seen.has(cs)) {
+            map.removeLayer(markers[cs]);
+            delete markers[cs];
+          }
+        }
+
+        counterEl.textContent = `${flights.length.toLocaleString()} aircraft tracked`;
+      }
+
+      (async function init() {
+        const flights = await fetchFlights();
+        updateMarkers(flights);
+
+        setInterval(async () => {
+          const flights = await fetchFlights();
+          updateMarkers(flights);
+        }, 10_000);
+      })();
+    </script>
+  </body>
+</html>

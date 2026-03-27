@@ -161,6 +161,7 @@
         <p>
           Ask about live flights, aviation terms, route distances, and airport status.
         </p>
+        <a href="/map" style="display:inline-block;margin-top:8px;color:#7eb8ff;text-decoration:none;font-size:0.95rem;">🗺 Live Map</a>
       </header>
 
       <section class="chat-shell">
@@ -217,6 +218,8 @@
           formEl.requestSubmit();
         }
       });
+
+      const urlQuery = new URLSearchParams(window.location.search).get("q");
 
       formEl.addEventListener("submit", async (event) => {
         event.preventDefault();
@@ -334,6 +337,11 @@
           setBusy(false, "Request failed.");
         }
       });
+
+      if (urlQuery) {
+        inputEl.value = urlQuery;
+        formEl.requestSubmit();
+      }
     </script>
   </body>
 </html>

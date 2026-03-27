@@ -181,6 +181,63 @@ export function createServer() {
     }
   });
 
+  app.get("/api/flights", async (_request, response) => {
+    const OPENSKY_URL =
+      "https://opensky-network.org/api/states/all?lamin=24.5&lamax=49.5&lomin=-125.0&lomax=-66.0";
+
+    try {
+      const osResponse = await fetch(OPENSKY_URL);
+
+      if (!osResponse.ok) {
+        logger.warn({
+          event: "opensky_api_error",
+          status: osResponse.status,
+        });
+        response.json([]);
+        return;
+      }
+
+      const data = (await osResponse.json()) as {
+        states: (string | number | boolean | null)[][] | null;
+      };
+
+      if (!data.states) {
+        response.json([]);
+        return;
+      }
+
+      const flights = data.states
+        .filter((s) => {
+          const lat = s[6];
+          const lon = s[5];
+          const onGround = s[8];
+          const callsign = typeof s[1] === "string" ? s[1].trim() : "";
+          return lat != null && lon != null && onGround !== true && callsign !== "";
+        })
+        .map((s) => ({
+          callsign: (s[1] as string).trim(),
+          lat: s[6] as number,
+          lon: s[5] as number,
+          altitudeFt: s[7] != null ? Math.round((s[7] as number) * 3.281) : 0,
+          speedKnots: s[9] != null ? Math.round((s[9] as number) * 1.944) : 0,
+          heading: s[10] != null ? Math.round(s[10] as number) : 0,
+          country: (s[2] as string) ?? "Unknown",
+        }));
+
+      response.json(flights);
+    } catch (error) {
+      logger.error({
+        event: "opensky_fetch_failed",
+        error: error instanceof Error ? error.message : "Unknown error",
+      });
+      response.json([]);
+    }
+  });
+
+  app.get("/map", (_request, response) => {
+    response.sendFile(path.join(getPublicDirectory(), "map.html"));
+  });
+
   app.get("/health", (_request, response) => {
     response.json({ ok: true });
   });
